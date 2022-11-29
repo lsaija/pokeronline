@@ -42,6 +42,8 @@ public class UtenteDTO {
 	private StatoUtente stato;
 
 	private Long[] ruoliIds;
+
+	private TavoloDTO tavolo;
 	
 	
 
@@ -55,6 +57,19 @@ public class UtenteDTO {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.stato = stato;
+	}
+	
+
+	public UtenteDTO(Long id,
+			@NotBlank(message = "{username.notblank}") @Size(min = 3, max = 15, message = "Il valore inserito '${validatedValue}' deve essere lungo tra {min} e {max} caratteri") String username,
+			Date dateCreated, StatoUtente stato, Long[] ruoliIds, TavoloDTO tavolo) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.dateCreated = dateCreated;
+		this.stato = stato;
+		this.ruoliIds = ruoliIds;
+		this.tavolo = tavolo;
 	}
 
 	public Long getId() {
@@ -139,7 +154,7 @@ public class UtenteDTO {
 	
 	
 
-	public Utente buildUtenteModel(boolean includeIdRoles) {
+	public Utente buildUtenteModel(boolean includeIdRoles,boolean includeTavolo) {
 		Utente result = new Utente(this.id, this.username, this.password, this.nome, this.cognome, this.email,
 				this.dateCreated, this.stato);
 		if (includeIdRoles && ruoliIds != null)

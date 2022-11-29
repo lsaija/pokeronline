@@ -14,6 +14,6 @@ public interface TavoloRepository extends CrudRepository<Tavolo, Long>{
 	List<Tavolo> findByDenominazione(String denominazione);
 	
 	@Query("select t from Tavolo t join fetch t.giocatori")
-	List<Tavolo> findAllFilmEager();
+	List<Tavolo> findAllTavoloEager();
 
 }

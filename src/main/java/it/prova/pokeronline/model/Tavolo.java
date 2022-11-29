@@ -31,11 +31,11 @@ public class Tavolo {
 	@Column(name = "dateCreated")
 	private LocalDateTime dateCreated;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "id")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tavolo")
 	private Set<Utente> giocatori = new HashSet<Utente>(0);
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "utente_id", nullable = false)
+	@JoinColumn(name = "utente_id", referencedColumnName = "id",nullable = false)
 	private Utente utenteCreazione;
 
 	public Tavolo() {
