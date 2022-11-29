@@ -53,14 +53,21 @@ public class Utente {
 	private Set<Ruolo> ruoli = new HashSet<>(0);
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "giocatore_id", nullable = false)
+	@JoinColumn(name = "tavolo_id")
 	private Tavolo tavoloGioco;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "utente")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "utenteCreazione")
 	private Set<Tavolo> tavoliCreati = new HashSet<Tavolo>(0);
 
 	public Utente() {
 	}
+
+	
+	public Utente(Long id) {
+		super();
+		this.id = id;
+	}
+
 
 	public Utente(String username, String password) {
 		super();

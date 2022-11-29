@@ -1,7 +1,6 @@
 package it.prova.pokeronline.model;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -35,7 +33,7 @@ public class Tavolo {
 	@Column(name = "dateCreated")
 	private LocalDateTime dateCreated;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tavolo")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tavoloGioco")
 	private Set<Utente> giocatori = new HashSet<Utente>(0);
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -72,6 +70,22 @@ public class Tavolo {
 	public Tavolo(String denominazione, Utente utenteCreazione) {
 		super();
 		this.denominazione = denominazione;
+		this.utenteCreazione = utenteCreazione;
+	}
+	
+
+	public Tavolo(Long id) {
+		super();
+		this.id = id;
+	}
+
+	public Tavolo(Long id, String denominazione, Integer esperienzaMinima, Integer cifraMinima,
+			LocalDateTime dateCreated, Utente utenteCreazione) {
+		this.id = id;
+		this.denominazione = denominazione;
+		this.esperienzaMinima = esperienzaMinima;
+		this.cifraMinima = cifraMinima;
+		this.dateCreated = dateCreated;
 		this.utenteCreazione = utenteCreazione;
 	}
 
