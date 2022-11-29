@@ -8,6 +8,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import it.prova.pokeronline.model.Tavolo;
 import it.prova.pokeronline.model.Utente;
 
@@ -29,6 +31,7 @@ public class TavoloDTO {
 
 	private Long[] giocatoriIds;
 	
+	@JsonIgnoreProperties(value = { "tavoliCreati","tavoloGioco" })
 	@NotNull(message = "{utenteCreazione.notnull}")
 	private Utente utenteCreazione;
 

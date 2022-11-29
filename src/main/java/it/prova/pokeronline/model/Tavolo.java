@@ -15,8 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-
-
 @Entity
 @Table(name = "tavolo")
 public class Tavolo {
@@ -26,21 +24,20 @@ public class Tavolo {
 	private Long id;
 	@Column(name = "denominazione")
 	private String denominazione;
-	@Column(name="esperienzaMinima")
+	@Column(name = "esperienzaMinima")
 	private Integer esperienzaMinima;
-	@Column(name="cifraMinima")
+	@Column(name = "cifraMinima")
 	private Integer cifraMinima;
 	@Column(name = "dateCreated")
 	private LocalDateTime dateCreated;
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tavoloGioco")
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "id")
 	private Set<Utente> giocatori = new HashSet<Utente>(0);
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "utente_id", nullable = false)
 	private Utente utenteCreazione;
-	
-	
+
 	public Tavolo() {
 		// TODO Auto-generated constructor stub
 	}
@@ -72,7 +69,6 @@ public class Tavolo {
 		this.denominazione = denominazione;
 		this.utenteCreazione = utenteCreazione;
 	}
-	
 
 	public Tavolo(Long id) {
 		super();
@@ -144,7 +140,5 @@ public class Tavolo {
 	public void setUtenteCreazione(Utente utenteCreazione) {
 		this.utenteCreazione = utenteCreazione;
 	}
-	
-	
-	
+
 }

@@ -43,9 +43,7 @@ public class UtenteDTO {
 
 	private Long[] ruoliIds;
 	
-	private Long[] tavoliIds;
 	
-	private Tavolo tavoloGioco;
 
 	public UtenteDTO() {
 	}
@@ -140,22 +138,6 @@ public class UtenteDTO {
 	}
 	
 	
-
-	public Long[] getTavoliIds() {
-		return tavoliIds;
-	}
-
-	public void setTavoliIds(Long[] tavoliIds) {
-		this.tavoliIds = tavoliIds;
-	}
-
-	public Tavolo getTavoloGioco() {
-		return tavoloGioco;
-	}
-
-	public void setTavoloGioco(Tavolo tavoloGioco) {
-		this.tavoloGioco = tavoloGioco;
-	}
 
 	public Utente buildUtenteModel(boolean includeIdRoles) {
 		Utente result = new Utente(this.id, this.username, this.password, this.nome, this.cognome, this.email,

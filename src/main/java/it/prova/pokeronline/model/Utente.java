@@ -39,9 +39,9 @@ public class Utente {
 	private String email;
 	@Column(name = "dateCreated")
 	private Date dateCreated;
-	@Column(name="esperienzaAccumulata")
+	@Column(name = "esperienzaAccumulata")
 	private Integer esperienzaAccumulata;
-	@Column(name="creditoAccumulato")
+	@Column(name = "creditoAccumulato")
 	private Integer creditoAccumulato;
 
 	// se non uso questa annotation viene gestito come un intero
@@ -51,23 +51,14 @@ public class Utente {
 	@ManyToMany
 	@JoinTable(name = "utente_ruolo", joinColumns = @JoinColumn(name = "utente_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ruolo_id", referencedColumnName = "ID"))
 	private Set<Ruolo> ruoli = new HashSet<>(0);
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "tavolo_id")
-	private Tavolo tavoloGioco;
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "utenteCreazione")
-	private Set<Tavolo> tavoliCreati = new HashSet<Tavolo>(0);
 
 	public Utente() {
 	}
 
-	
 	public Utente(Long id) {
 		super();
 		this.id = id;
 	}
-
 
 	public Utente(String username, String password) {
 		super();
@@ -103,8 +94,6 @@ public class Utente {
 		this.stato = stato;
 		this.ruoli = ruoli;
 	}
-	
-	
 
 	public Utente(String username, Date dateCreated, Integer esperienzaAccumulata, Integer creditoAccumulato) {
 		super();
@@ -113,7 +102,7 @@ public class Utente {
 		this.esperienzaAccumulata = esperienzaAccumulata;
 		this.creditoAccumulato = creditoAccumulato;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -217,23 +206,5 @@ public class Utente {
 	public void setCreditoAccumulato(Integer creditoAccumulato) {
 		this.creditoAccumulato = creditoAccumulato;
 	}
-
-	public Tavolo getTavoloGioco() {
-		return tavoloGioco;
-	}
-
-	public void setTavoloGioco(Tavolo tavoloGioco) {
-		this.tavoloGioco = tavoloGioco;
-	}
-
-	public Set<Tavolo> getTavoliCreati() {
-		return tavoliCreati;
-	}
-
-	public void setTavoliCreati(Set<Tavolo> tavoliCreati) {
-		this.tavoliCreati = tavoliCreati;
-	}
-	
-	
 
 }
