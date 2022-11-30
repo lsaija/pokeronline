@@ -104,20 +104,19 @@ public class UtenteController {
 	public List<UtenteDTO> search(@RequestBody UtenteDTO example, Principal principal) {
 		return UtenteDTO.createUtenteDTOListFromModelList(utenteService.findByExample(example.buildUtenteModel(false)));
 	}
-	
+			
 	@PutMapping("/cambiaStato/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void changeUserAbilitation(@PathVariable(value = "id", required = true) long id) {
 		utenteService.changeUserAbilitation(id);
 	}
 	
-	@PutMapping("/{id}")
-	public void disabilita(@Valid @RequestBody UtenteDTO utenteInput, @PathVariable(required = true) Long id) {
+	@PutMapping("/disabilita/{id}")
+	public void disabilita(@PathVariable(required = true) Long id) {
 		Utente utente = utenteService.caricaSingoloUtente(id);
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		if (utente == null)
 			throw new UtenteNotFoundException("Utente not found con id: " + id);
-		utenteInput.setId(id);
-		utenteService.disabilityUserAbilitation(utenteInput.getId());
+		utenteService.disabilityUserAbilitation(id);
 	}
 }

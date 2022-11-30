@@ -11,13 +11,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import it.prova.pokeronline.model.Ruolo;
 import it.prova.pokeronline.model.StatoUtente;
 import it.prova.pokeronline.model.Utente;
 
 
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UtenteDTO {
 
 	private Long id;
@@ -26,8 +27,8 @@ public class UtenteDTO {
 	@Size(min = 3, max = 15, message = "Il valore inserito '${validatedValue}' deve essere lungo tra {min} e {max} caratteri")
 	private String username;
 
-	//@NotBlank(message = "{password.notblank}")
-	//@Size(min = 8, max = 15, message = "Il valore inserito deve essere lungo tra {min} e {max} caratteri")
+	@NotBlank(message = "{password.notblank}")
+	@Size(min = 8, max = 15, message = "Il valore inserito deve essere lungo tra {min} e {max} caratteri")
 	private String password;
 
 	private String confermaPassword;

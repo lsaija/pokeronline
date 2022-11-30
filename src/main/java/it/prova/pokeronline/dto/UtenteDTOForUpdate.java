@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import it.prova.pokeronline.model.Ruolo;
@@ -34,11 +35,11 @@ public class UtenteDTOForUpdate {
 	@NotBlank(message = "{cognome.notblank}")
 	private String cognome;
 
-	@NotBlank(message = "{email.notblank}")
 	private String email;
 
 	private Long[] ruoliIds;
 
+	@JsonIgnoreProperties(value = { "giocatori","utenteCreatore"})
 	private Tavolo tavolo;
 
 	public UtenteDTOForUpdate() {
