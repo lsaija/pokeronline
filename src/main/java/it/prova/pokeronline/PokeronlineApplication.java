@@ -56,6 +56,8 @@ public class PokeronlineApplication implements CommandLineRunner {
 		if (utenteServiceInstance.findByUsername("admin") == null) {
 			Utente admin = new Utente("admin", "admin", "Mario", "Rossi", new Date());
 			admin.setEmail("a.admin@prova.it");
+			admin.setCreditoAccumulato(0);
+			admin.setEsperienzaAccumulata(0);
 			admin.getRuoli().add(ruoloServiceInstance.cercaPerDescrizioneECodice("Administrator", Ruolo.ROLE_ADMIN));
 			utenteServiceInstance.inserisciNuovo(admin);
 			// l'inserimento avviene come created ma io voglio attivarlo
@@ -65,6 +67,8 @@ public class PokeronlineApplication implements CommandLineRunner {
 		if (utenteServiceInstance.findByUsername("user") == null) {
 			Utente classicUser = new Utente("user", "user", "Antonio", "Verdi", new Date());
 			classicUser.setEmail("u.user@prova.it");
+			classicUser.setCreditoAccumulato(0);
+			classicUser.setEsperienzaAccumulata(6);
 			classicUser.getRuoli()
 					.add(ruoloServiceInstance.cercaPerDescrizioneECodice("Classic Player", Ruolo.ROLE_CLASSIC_PLAYER));
 			utenteServiceInstance.inserisciNuovo(classicUser);
@@ -76,6 +80,8 @@ public class PokeronlineApplication implements CommandLineRunner {
 		if (utenteServiceInstance.findByUsername("user1") == null) {
 			Utente classicUser1 = new Utente("user1", "user1", "Antonioo", "Verdii", new Date());
 			classicUser1.setEmail("u.user1@prova.it");
+			classicUser1.setCreditoAccumulato(0);
+			classicUser1.setEsperienzaAccumulata(0);
 			classicUser1.getRuoli()
 					.add(ruoloServiceInstance.cercaPerDescrizioneECodice("Classic Player", Ruolo.ROLE_CLASSIC_PLAYER));
 			utenteServiceInstance.inserisciNuovo(classicUser1);
@@ -86,6 +92,8 @@ public class PokeronlineApplication implements CommandLineRunner {
 		if (utenteServiceInstance.findByUsername("special") == null) {
 			Utente classicUser2 = new Utente("special", "user2", "Antoniooo", "Verdiii", new Date());
 			classicUser2.setEmail("u.user2@prova.it");
+			classicUser2.setCreditoAccumulato(0);
+			classicUser2.setEsperienzaAccumulata(0);
 			classicUser2.getRuoli()
 					.add(ruoloServiceInstance.cercaPerDescrizioneECodice("Special player", Ruolo.ROLE_SPECIAL_PLAYER));
 			utenteServiceInstance.inserisciNuovo(classicUser2);

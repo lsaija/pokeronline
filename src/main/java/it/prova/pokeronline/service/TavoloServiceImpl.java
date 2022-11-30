@@ -157,12 +157,14 @@ public class TavoloServiceImpl implements TavoloService {
 		return (List<Tavolo>) repository.findAllByEsperienzaMin(min);
 	}
 	
+	@Override
 	@Transactional
 	public void entraPartita(Long idTavolo) {
-		Tavolo tavolo = repository.findById(idTavolo).orElse(null);
+		Utente utente = utenteRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+
+		Tavolo tavolo = repository.findSingleTavoloEager(idTavolo);
 		if (tavolo == null)
 			throw new TavoloNotFoundException("Tavolo con id: " + idTavolo + " not Found");
-		Utente utente = utenteRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).get();
 		tavolo.getGiocatori().add(utente);
 		repository.save(tavolo);
 	}

@@ -39,8 +39,7 @@ public class UtenteDTOForUpdate {
 
 	private Long[] ruoliIds;
 
-	@JsonIgnoreProperties(value = { "giocatori","utenteCreatore"})
-	private Tavolo tavolo;
+
 
 	public UtenteDTOForUpdate() {
 	}
@@ -110,21 +109,12 @@ public class UtenteDTOForUpdate {
 		this.ruoliIds = ruoliIds;
 	}
 
-	public Tavolo getTavolo() {
-		return tavolo;
-	}
-
-	public void setTavolo(Tavolo tavolo) {
-		this.tavolo = tavolo;
-	}
 
 	public Utente buildUtenteModel(boolean includeRoles) {
 		Utente result = new Utente(this.id, this.username, this.nome, this.cognome, this.email);
 		if (includeRoles && ruoliIds != null)
 			result.setRuoli(Arrays.asList(ruoliIds).stream().map(id -> new Ruolo(id)).collect(Collectors.toSet()));
 
-		if (this.tavolo != null)
-			result.setTavolo(tavolo);
 
 		return result;
 	}

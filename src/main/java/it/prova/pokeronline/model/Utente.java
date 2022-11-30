@@ -54,9 +54,6 @@ public class Utente {
 	@JoinTable(name = "utente_ruolo", joinColumns = @JoinColumn(name = "utente_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ruolo_id", referencedColumnName = "ID"))
 	private Set<Ruolo> ruoli = new HashSet<>(0);
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "tavolo_id")
-	private Tavolo tavolo; 
 	
 	public Utente() {
 	}
@@ -110,39 +107,9 @@ public class Utente {
 	}
 	
 
-	public Utente(Long id, String username,String password ,String nome, String cognome,String email ,Date dateCreated, Integer esperienzaAccumulata,
-			Integer creditoAccumulato, StatoUtente stato, Tavolo tavolo) {
-		super();
-		this.id = id;
-		this.username = username;
-		this.password=password;
-		this.nome = nome;
-		this.cognome = cognome;
-		this.email=email;
-		this.dateCreated = dateCreated;
-		this.esperienzaAccumulata = esperienzaAccumulata;
-		this.creditoAccumulato = creditoAccumulato;
-		this.stato = stato;
-		this.tavolo = tavolo;
-	}
 
-	public Utente(Long id, String username, String password, String nome, String cognome, String email,
-			Date dateCreated, Integer esperienzaAccumulata, Integer creditoAccumulato, StatoUtente stato,
-			Set<Ruolo> ruoli, Tavolo tavolo) {
-		super();
-		this.id = id;
-		this.username = username;
-		this.password = password;
-		this.nome = nome;
-		this.cognome = cognome;
-		this.email = email;
-		this.dateCreated = dateCreated;
-		this.esperienzaAccumulata = esperienzaAccumulata;
-		this.creditoAccumulato = creditoAccumulato;
-		this.stato = stato;
-		this.ruoli = ruoli;
-		this.tavolo = tavolo;
-	}
+
+
 	
 	
 
@@ -306,13 +273,7 @@ public class Utente {
 		this.creditoAccumulato = creditoAccumulato;
 	}
 
-	public Tavolo getTavolo() {
-		return tavolo;
-	}
 
-	public void setTavolo(Tavolo tavolo) {
-		this.tavolo = tavolo;
-	}
 	
 
 }

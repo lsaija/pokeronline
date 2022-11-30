@@ -30,19 +30,19 @@ public class PlayController {
 	@Autowired
 	private UtenteService utenteService;
 
-	@PostMapping("compraCredito/{credito}")
+	@GetMapping("/compraCredito/{credito}")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public String compraCredito(@PathVariable(value = "credito", required = true) Integer credito) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
 		Utente utente = utenteService.findByUsername(username);
 
-		Integer creditoAggiornatp = utente.getCreditoAccumulato() + credito;
+		Integer creditoAggiornato = utente.getCreditoAccumulato() + credito;
 
-		utente.setCreditoAccumulato(creditoAggiornatp);
+		utente.setCreditoAccumulato(creditoAggiornato);
 		utenteService.aggiorna(utente);
 
-		return "Il tuo nuovo credito e' di " + creditoAggiornatp;
+		return "Il tuo nuovo credito e' di " + creditoAggiornato;
 	}
 
 	@GetMapping("/lastGame")
@@ -54,7 +54,7 @@ public class PlayController {
 		return TavoloDTO.buildTavoloDTOFromModel(tavoloService.ultimoGame(utenteLoggato.getId()),true);
 	}
 
-	@PostMapping("abbandonaPartita")
+	@GetMapping("/abbandonaPartita")
 	public UtenteDTO abbandonaPartita() {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -77,15 +77,15 @@ public class PlayController {
 		return tavoliTrovati;
 	}
 	
-	@PostMapping("giocaTavolo/{id}")
-	public UtenteDTO gioca(@PathVariable(value = "id", required = true) long idTavolo) {
+	@GetMapping("/giocaTavolo/{id}")
+	public UtenteDTO gioca(@PathVariable(value = "id", required = true) Long idTavolo) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Utente utente = utenteService.findByUsername(username);
-		Tavolo result = tavoloService.ultimoGame(utente.getId());
+		//Tavolo result = tavoloService.ultimoGame(utente.getId());
 		
-		if(result != null) {
-			throw new GiocatoreGiaPresenteTavoloException("Giocatore presente in un altro tavolo!");
-		}
+//		if(result != null) {
+//			throw new GiocatoreGiaPresenteTavoloException("Giocatore presente in un altro tavolo!");
+//		}
 		tavoloService.entraPartita(idTavolo);
 		double segnoDouble = Math.random();
 		String segno = "";
