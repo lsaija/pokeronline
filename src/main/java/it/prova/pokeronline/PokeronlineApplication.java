@@ -3,6 +3,7 @@ package it.prova.pokeronline;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Date;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -10,8 +11,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import it.prova.pokeronline.model.Ruolo;
+import it.prova.pokeronline.model.Tavolo;
 import it.prova.pokeronline.model.Utente;
+import it.prova.pokeronline.repository.tavolo.TavoloRepository;
 import it.prova.pokeronline.service.RuoloService;
+import it.prova.pokeronline.service.TavoloService;
 import it.prova.pokeronline.service.UtenteService;
 
 @SpringBootApplication
@@ -21,7 +25,10 @@ public class PokeronlineApplication implements CommandLineRunner {
 	private RuoloService ruoloServiceInstance;
 	@Autowired
 	private UtenteService utenteServiceInstance;
-
+	@Autowired
+	private TavoloRepository tavoloRepository;
+	@Autowired
+	private TavoloService tavoloServiceInstance;
 	public static void main(String[] args) {
 		SpringApplication.run(PokeronlineApplication.class, args);
 	}
@@ -75,8 +82,8 @@ public class PokeronlineApplication implements CommandLineRunner {
 			utenteServiceInstance.changeUserAbilitation(classicUser1.getId());
 		}
 
-		if (utenteServiceInstance.findByUsername("user2") == null) {
-			Utente classicUser2 = new Utente("user2", "user2", "Antoniooo", "Verdiii", new Date());
+		if (utenteServiceInstance.findByUsername("special") == null) {
+			Utente classicUser2 = new Utente("special", "user2", "Antoniooo", "Verdiii", new Date());
 			classicUser2.setEmail("u.user2@prova.it");
 			classicUser2.getRuoli()
 					.add(ruoloServiceInstance.cercaPerDescrizioneECodice("Special player", Ruolo.ROLE_SPECIAL_PLAYER));
@@ -84,5 +91,21 @@ public class PokeronlineApplication implements CommandLineRunner {
 			// l'inserimento avviene come created ma io voglio attivarlo
 			utenteServiceInstance.changeUserAbilitation(classicUser2.getId());
 		}
+		
+		
+		// Mettere dati tavolo
+				Tavolo tavolo1 = new Tavolo("tavoloFigo",10, 500, oraInizio);
+				tavolo1.setUtenteCreazione(utenteServiceInstance.findByUsername("admin"));
+				Set<Utente> giocatori = Set.of(utenteServiceInstance.findByUsername("admin"), utenteServiceInstance.findByUsername("user"), utenteServiceInstance.findByUsername("special"));
+				tavolo1.setGiocatori(giocatori);
+				
+				if (tavoloServiceInstance.findByDenominazione(tavolo1.getDenominazione()).isEmpty())
+					tavoloRepository.save(tavolo1);
+				
+				Tavolo tavolo2 = new Tavolo("tavoloBrutto",5, 50, oraInizio);
+				tavolo2.setUtenteCreazione(utenteServiceInstance.findByUsername("special"));
+				
+				if (tavoloServiceInstance.findByDenominazione(tavolo2.getDenominazione()).isEmpty())
+					tavoloRepository.save(tavolo2);
 	}
 }

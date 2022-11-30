@@ -254,8 +254,8 @@ public class UtenteDTO {
 	}
 	
 	public static Set<UtenteDTO> createUtenteDTOSetFromModelSet(Set<Utente> modelListInput) {
-		return modelListInput.stream().map(agendaEntity -> {
-			return UtenteDTO.buildUtenteDTOFromModel(agendaEntity);
+		return modelListInput.stream().map(utenteEntity -> {
+			return UtenteDTO.buildUtenteDTOFromModel(utenteEntity);
 		}).collect(Collectors.toSet());
 	}
 

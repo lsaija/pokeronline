@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +14,7 @@ import it.prova.pokeronline.model.Utente;
 import it.prova.pokeronline.repository.tavolo.TavoloRepository;
 import it.prova.pokeronline.repository.utente.UtenteRepository;
 import it.prova.pokeronline.web.api.exception.AncoraGiocatoriAlTavoloException;
+import it.prova.pokeronline.web.api.exception.NonInGiocoException;
 import it.prova.pokeronline.web.api.exception.TavoloNotFoundException;
 import it.prova.pokeronline.web.api.exception.UtenteNonCombaciaException;
 import it.prova.pokeronline.web.api.exception.UtenteNotFoundException;
@@ -118,6 +118,39 @@ public class TavoloServiceImpl implements TavoloService {
 			example.setUtenteCreazione(utenteInSessione);
 			return repository.findByExampleEager(example);
 		
+	}
+	
+	@Override
+	@Transactional
+	public Tavolo ultimoGame(Long id) {
+		Tavolo result = repository.findByGiocatoriId(id);
+
+		if (result == null)
+			throw new NonInGiocoException("Non si è in nessun tavolo");
+
+		return result;
+	}
+	
+	@Transactional
+	public Utente abbandonaPartita(Long idTavolo) {
+		Tavolo tavoloInstance = repository.findById(idTavolo).orElse(null);
+		if (tavoloInstance == null)
+			throw new TavoloNotFoundException("Tavolo con id: " + idTavolo + " not Found");
+
+		Utente utente = utenteRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+		
+		tavoloInstance.getGiocatori().remove(utente);
+
+		utente.setEsperienzaAccumulata(utente.getEsperienzaAccumulata() + 1);
+		repository.save(tavoloInstance);
+		utenteRepository.save(utente);
+
+		return utente;
+	}
+	
+	@Transactional
+	public List<Tavolo> listEsperienzaMin(Integer min) {
+		return (List<Tavolo>) repository.findAllByEsperienzaMin(min);
 	}
 
 }
