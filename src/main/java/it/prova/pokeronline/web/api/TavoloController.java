@@ -92,10 +92,12 @@ public class TavoloController {
 		tavoloService.rimuovi(id);
 	}
 
-	//Implementare
+	
 	@PostMapping("/search")
 	public List<TavoloDTO> search(@RequestBody TavoloDTO example) {
-		return TavoloDTO.createTavoloDTOListFromModelList(tavoloService.findByExample(example.buildTavoloModel(true)));
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		return TavoloDTO.createTavoloDTOListFromModelList(tavoloService.findByExample(example.buildTavoloModel(true),username));
 	}
 
 

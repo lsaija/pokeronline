@@ -4,22 +4,28 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.prova.pokeronline.dto.UtenteDTO;
 import it.prova.pokeronline.model.Tavolo;
+import it.prova.pokeronline.model.Utente;
 import it.prova.pokeronline.repository.tavolo.TavoloRepository;
+import it.prova.pokeronline.repository.utente.UtenteRepository;
 import it.prova.pokeronline.web.api.exception.AncoraGiocatoriAlTavoloException;
 import it.prova.pokeronline.web.api.exception.TavoloNotFoundException;
 import it.prova.pokeronline.web.api.exception.UtenteNonCombaciaException;
+import it.prova.pokeronline.web.api.exception.UtenteNotFoundException;
 
 @Service
 @Transactional(readOnly = true)
 public class TavoloServiceImpl implements TavoloService {
 	@Autowired
 	private TavoloRepository repository;
+	@Autowired
+	private UtenteRepository utenteRepository;
 	@Autowired
 	private UtenteService utenteService;
 
@@ -99,10 +105,19 @@ public class TavoloServiceImpl implements TavoloService {
 		return repository.findByDenominazione(denominazione);
 	}
 
-	// Implementare!!!!!!!!!!
 	@Override
-	public List<Tavolo> findByExample(Tavolo Example) {
-		return repository.findByExample(Example);
+	public List<Tavolo> findByExample(Tavolo example, String username) {
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		if (utenteInSessione == null)
+			throw new UtenteNotFoundException("Utente non trovato.");
+		
+		if(utenteInSessione.isAdmin())
+			return repository.findByExample(example);
+		
+		if(utenteInSessione.isSpecial())
+			example.setUtenteCreazione(utenteInSessione);
+			return repository.findByExampleEager(example);
+		
 	}
 
 }

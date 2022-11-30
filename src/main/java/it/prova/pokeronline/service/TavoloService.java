@@ -21,6 +21,7 @@ public interface TavoloService {
 
 	List<Tavolo> findByDenominazione(String denominazione);
 	
-	List<Tavolo> findByExample(Tavolo Example);
+	List<Tavolo> findByExample(Tavolo Example,String username);
+	
 
 }

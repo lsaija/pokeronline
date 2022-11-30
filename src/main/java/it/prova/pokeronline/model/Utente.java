@@ -18,6 +18,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "utente")
@@ -172,6 +174,16 @@ public class Utente {
 		this.esperienzaAccumulata = esperienzaAccumulata;
 		this.creditoAccumulato = creditoAccumulato;
 		this.stato = stato;
+	}
+
+
+	public Utente(Long id, String username, String nome, String cognome, String email) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.email = email;
 	}
 
 	public Long getId() {

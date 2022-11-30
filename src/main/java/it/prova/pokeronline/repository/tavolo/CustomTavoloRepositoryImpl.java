@@ -21,43 +21,75 @@ public class CustomTavoloRepositoryImpl implements CustomTavoloRepository{
 	
 
 	
-	//Implementare!!!!!!!!!!!!!!!!!!
 	@Override
 	public List<Tavolo> findByExample(Tavolo example) {
-		return null;
-		/*Map<String, Object> paramaterMap = new HashMap<String, Object>();
+		Map<String, Object> paramaterMap = new HashMap<String, Object>();
 		List<String> whereClauses = new ArrayList<String>();
 
-		StringBuilder queryBuilder = new StringBuilder("select a from Agenda a where a.id = a.id ");
+		StringBuilder queryBuilder = new StringBuilder("select distinct t from Tavolo t where t.id = t.id ");
 
-		if (StringUtils.isNotEmpty(example.getDescrizione())) {
-			whereClauses.add(" a.descrizione  like :descrizione ");
-			paramaterMap.put("descrizione", "%" + example.getDescrizione() + "%");
+		if (StringUtils.isNotEmpty(example.getDenominazione())) {
+			whereClauses.add(" t.denominazione like :denominazione ");
+			paramaterMap.put("denominazione", "%" + example.getDenominazione() + "%");
 		}
-		
-		if (example.getDataOraInizio() != null) {
-			whereClauses.add(" a.dataOraInizio >= :dataOraInizio ");
-			paramaterMap.put("dataOraInizio", "%" + example.getDataOraInizio() + "%");
+		if (example.getDateCreated() != null) {
+			whereClauses.add(" t.dataCreazione >= :dataCreazione ");
+			paramaterMap.put("dataCreazione", example.getDateCreated());
 		}
-		if (example.getDataOraFine() !=null) {
-			whereClauses.add(" a.dataOraFine >=:dataOraFine ");
-			paramaterMap.put("dataOraFine", "%" + example.getDataOraFine()+ "%");
+		if (example.getCifraMinima() != null) {
+			whereClauses.add(" t.cifraMinima >= :cifraMinima ");
+			paramaterMap.put("cifraMinima", example.getCifraMinima());
 		}
-	
-		if (example.getUtente() != null) {
-			whereClauses.add("a.utente = :utente ");
-			paramaterMap.put("utente", example.getUtente());
+		if (example.getEsperienzaMinima() != null) {
+			whereClauses.add(" t.esperienzaMinima >= :esperienzaMinima ");
+			paramaterMap.put("esperienzaMinima", example.getEsperienzaMinima());
 		}
 		
 		queryBuilder.append(!whereClauses.isEmpty()?" and ":"");
 		queryBuilder.append(StringUtils.join(whereClauses, " and "));
-		TypedQuery<Agenda> typedQuery = entityManager.createQuery(queryBuilder.toString(), Agenda.class);
+		TypedQuery<Tavolo> typedQuery = entityManager.createQuery(queryBuilder.toString(), Tavolo.class);
 
 		for (String key : paramaterMap.keySet()) {
 			typedQuery.setParameter(key, paramaterMap.get(key));
 		}
-
-		return typedQuery.getResultList();*/
+		return typedQuery.getResultList();
 	}
 
+	@Override
+	public List<Tavolo> findByExampleEager(Tavolo example) {
+		Map<String, Object> paramaterMap = new HashMap<String, Object>();
+		List<String> whereClauses = new ArrayList<String>();
+
+		StringBuilder queryBuilder = new StringBuilder("select distinct t from Tavolo t join fetch t.utenteCreazione u where t.id = t.id ");
+
+		if (StringUtils.isNotEmpty(example.getDenominazione())) {
+			whereClauses.add(" t.denominazione like :denominazione ");
+			paramaterMap.put("denominazione", "%" + example.getDenominazione() + "%");
+		}
+		if (example.getDateCreated() != null) {
+			whereClauses.add(" t.dataCreazione >= :dataCreazione ");
+			paramaterMap.put("dataCreazione", example.getDateCreated());
+		}
+		if (example.getCifraMinima() != null) {
+			whereClauses.add(" t.cifraMinima >= :cifraMinima ");
+			paramaterMap.put("cifraMinima", example.getCifraMinima());
+		}
+		if (example.getEsperienzaMinima() != null) {
+			whereClauses.add(" t.esperienzaMinima >= :esperienzaMinima ");
+			paramaterMap.put("esperienzaMinima", example.getEsperienzaMinima());
+		}
+		if (example.getUtenteCreazione() != null && example.getUtenteCreazione().getId() != null) {
+			whereClauses.add(" u.id = :idUtente ");
+			paramaterMap.put("idUtente", example.getUtenteCreazione().getId());
+		}
+		
+		queryBuilder.append(!whereClauses.isEmpty()?" and ":"");
+		queryBuilder.append(StringUtils.join(whereClauses, " and "));
+		TypedQuery<Tavolo> typedQuery = entityManager.createQuery(queryBuilder.toString(), Tavolo.class);
+
+		for (String key : paramaterMap.keySet()) {
+			typedQuery.setParameter(key, paramaterMap.get(key));
+		}
+		return typedQuery.getResultList();
+	}
 }

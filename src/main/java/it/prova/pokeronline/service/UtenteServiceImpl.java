@@ -91,5 +91,19 @@ public class UtenteServiceImpl implements UtenteService {
 	public Utente findByUsername(String username) {
 		return repository.findByUsername(username).orElse(null);
 	}
+	
+	@Transactional
+	public void disabilityUserAbilitation(Long utenteInstanceId) {
+		Utente utenteInstance = caricaSingoloUtente(utenteInstanceId);
+		if (utenteInstance == null)
+			throw new RuntimeException("Elemento non trovato.");
+
+		if (utenteInstance.getStato() == null || utenteInstance.getStato().equals(StatoUtente.CREATO))
+			utenteInstance.setStato(StatoUtente.DISABILITATO);
+		else if (utenteInstance.getStato().equals(StatoUtente.ATTIVO))
+			utenteInstance.setStato(StatoUtente.DISABILITATO);
+		else if (utenteInstance.getStato().equals(StatoUtente.DISABILITATO))
+			utenteInstance.setStato(StatoUtente.DISABILITATO);
+	}
 
 }
