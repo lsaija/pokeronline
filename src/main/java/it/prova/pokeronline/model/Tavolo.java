@@ -31,7 +31,7 @@ public class Tavolo {
 	@Column(name = "dateCreated")
 	private LocalDateTime dateCreated;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tavolo")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "id")
 	private Set<Utente> giocatori = new HashSet<Utente>(0);
 
 	@ManyToOne(fetch = FetchType.LAZY)

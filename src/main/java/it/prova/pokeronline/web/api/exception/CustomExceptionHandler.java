@@ -105,5 +105,17 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(GiocatoreGiaPresenteTavoloException.class)
+	public ResponseEntity<Object> handleGiocatoreGiaPresenteTavoloException(GiocatoreGiaPresenteTavoloException ex,
+			WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.UNPROCESSABLE_ENTITY);
+
+		return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
+	}
 
 }

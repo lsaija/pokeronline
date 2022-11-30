@@ -30,5 +30,7 @@ public interface TavoloService {
 	
 	List<Tavolo> listEsperienzaMin(Integer min);
 	
+	void entraPartita(Long idTavolo);
+	
 
 }

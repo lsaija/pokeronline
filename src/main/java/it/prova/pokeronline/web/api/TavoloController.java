@@ -36,12 +36,12 @@ public class TavoloController {
 
 	@GetMapping(value = "/tavoliInfo")
 	public List<TavoloDTO> getAll() {
-		return TavoloDTO.createTavoloDTOListFromModelList(tavoloService.listAllElements(true));
+		return TavoloDTO.createTavoloDTOListFromModelList(tavoloService.listAllElements(true),true);
 	}
 	
 	@GetMapping
 	public List<TavoloDTO> getAllUtenteSingolo() {
-		return TavoloDTO.createTavoloDTOListFromModelList(tavoloService.listAllElementsSingoloUtente());
+		return TavoloDTO.createTavoloDTOListFromModelList(tavoloService.listAllElementsSingoloUtente(),true);
 	}
 
 	@PostMapping
@@ -53,7 +53,7 @@ public class TavoloController {
 			throw new UtenteNonCombaciaException("Non è ammesso fornire un utente per la creazione");
 		
 		Tavolo tavoloInserito = tavoloService.inserisciNuovo(tavoloInput.buildTavoloInsertModel());
-		return TavoloDTO.buildTavoloDTOFromModel(tavoloInserito);
+		return TavoloDTO.buildTavoloDTOFromModel(tavoloInserito,true);
 	}
 
 	@GetMapping("/{id}")
@@ -66,7 +66,7 @@ public class TavoloController {
 			throw new TavoloNotFoundException("Tavolo not found con id: " + id);
 		//aggiungere condizione utente
 
-		return TavoloDTO.buildTavoloDTOFromModel(tavolo);
+		return TavoloDTO.buildTavoloDTOFromModel(tavolo,true);
 	}
 	
 	@PutMapping("/{id}")
@@ -81,7 +81,7 @@ public class TavoloController {
 
 		tavoloInput.setId(id);
 		Tavolo tavoloAggiornato = tavoloService.aggiorna(tavoloInput.buildTavoloInsertModel());
-		return TavoloDTO.buildTavoloDTOFromModel(tavoloAggiornato);
+		return TavoloDTO.buildTavoloDTOFromModel(tavoloAggiornato,true);
 	}
 
 	@DeleteMapping("/{id}")
@@ -98,7 +98,7 @@ public class TavoloController {
 	public List<TavoloDTO> search(@RequestBody TavoloDTO example) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-		return TavoloDTO.createTavoloDTOListFromModelList(tavoloService.findByExample(example.buildTavoloModel(true),username));
+		return TavoloDTO.createTavoloDTOListFromModelList(tavoloService.findByExample(example.buildTavoloModel(true),username),true);
 	}
 
 

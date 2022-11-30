@@ -20,7 +20,7 @@ import it.prova.pokeronline.web.api.exception.UtenteNonCombaciaException;
 import it.prova.pokeronline.web.api.exception.UtenteNotFoundException;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class TavoloServiceImpl implements TavoloService {
 	@Autowired
 	private TavoloRepository repository;
@@ -30,8 +30,12 @@ public class TavoloServiceImpl implements TavoloService {
 	private UtenteService utenteService;
 
 	public List<Tavolo> listAllElements(boolean eager) {
-		if (eager)
-			return (List<Tavolo>) repository.findAllTavoloEager();
+		List<Tavolo> result;
+		if (eager) {
+			result = (List<Tavolo>) repository.findAllTavoloEager();
+			System.out.println(result.get(0).getGiocatori().isEmpty());
+			return result;
+		}
 
 		return (List<Tavolo>) repository.findAll();
 	}
@@ -151,6 +155,16 @@ public class TavoloServiceImpl implements TavoloService {
 	@Transactional
 	public List<Tavolo> listEsperienzaMin(Integer min) {
 		return (List<Tavolo>) repository.findAllByEsperienzaMin(min);
+	}
+	
+	@Transactional
+	public void entraPartita(Long idTavolo) {
+		Tavolo tavolo = repository.findById(idTavolo).orElse(null);
+		if (tavolo == null)
+			throw new TavoloNotFoundException("Tavolo con id: " + idTavolo + " not Found");
+		Utente utente = utenteRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+		tavolo.getGiocatori().add(utente);
+		repository.save(tavolo);
 	}
 
 }

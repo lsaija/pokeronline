@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Date;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -96,9 +97,9 @@ public class PokeronlineApplication implements CommandLineRunner {
 		// Mettere dati tavolo
 				Tavolo tavolo1 = new Tavolo("tavoloFigo",10, 500, oraInizio);
 				tavolo1.setUtenteCreazione(utenteServiceInstance.findByUsername("admin"));
-				Set<Utente> giocatori = Set.of(utenteServiceInstance.findByUsername("admin"), utenteServiceInstance.findByUsername("user"), utenteServiceInstance.findByUsername("special"));
-				tavolo1.setGiocatori(giocatori);
-				
+				//Set<Utente> giocatori = Set.of(utenteServiceInstance.findByUsername("admin"), utenteServiceInstance.findByUsername("user"), utenteServiceInstance.findByUsername("special"));
+				tavolo1.setGiocatori(utenteServiceInstance.listAllUtenti().stream().collect(Collectors.toSet()));
+				System.out.println(tavolo1.getGiocatori().isEmpty());
 				if (tavoloServiceInstance.findByDenominazione(tavolo1.getDenominazione()).isEmpty())
 					tavoloRepository.save(tavolo1);
 				

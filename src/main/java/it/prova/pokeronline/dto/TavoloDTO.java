@@ -2,6 +2,7 @@ package it.prova.pokeronline.dto;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,7 +34,8 @@ public class TavoloDTO {
 	@NotNull(message = "{dateCreated.notnull}")
 	private LocalDateTime dateCreated;
 
-	private Long[] giocatoriIds;
+	@JsonIgnoreProperties(value = { "tavolo" })
+	private Set<UtenteDTO> giocatori = new HashSet<>();
 	
 	@JsonIgnoreProperties(value = { "tavolo" })
 	@NotNull(message = "{utenteCreazione.notnull}")
@@ -43,17 +45,7 @@ public class TavoloDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public TavoloDTO(Long id,String denominazione, Integer esperienzaMinima,Integer cifraMinima,LocalDateTime dateCreated, Long[] giocatoriIds,UtenteDTO utenteCreazione) {
-		super();
-		this.id = id;
-		this.denominazione = denominazione;
-		this.esperienzaMinima = esperienzaMinima;
-		this.cifraMinima = cifraMinima;
-		this.dateCreated = dateCreated;
-		this.giocatoriIds = giocatoriIds;
-		this.utenteCreazione = utenteCreazione;
-	}
-
+	
 	public TavoloDTO(String denominazione,Integer esperienzaMinima,Integer cifraMinima,LocalDateTime dateCreated,UtenteDTO utenteCreazione) {
 		super();
 		this.denominazione = denominazione;
@@ -114,13 +106,17 @@ public class TavoloDTO {
 		this.dateCreated = dateCreated;
 	}
 
-	public Long[] getGiocatoriIds() {
-		return giocatoriIds;
+
+
+	public Set<UtenteDTO> getGiocatori() {
+		return giocatori;
 	}
 
-	public void setGiocatoriIds(Long[] giocatoriIds) {
-		this.giocatoriIds = giocatoriIds;
+
+	public void setGiocatori(Set<UtenteDTO> giocatori) {
+		this.giocatori = giocatori;
 	}
+
 
 	public UtenteDTO getUtenteCreazione() {
 		return utenteCreazione;
@@ -133,31 +129,35 @@ public class TavoloDTO {
 	
 	public Tavolo buildTavoloModel(boolean includeIdGiocatori) {
 		Tavolo result = new Tavolo(id, denominazione, esperienzaMinima, cifraMinima, dateCreated, utenteCreazione.buildUtenteModel(false));
-		if (includeIdGiocatori && giocatoriIds != null)
-			result.setGiocatori(Arrays.asList(giocatoriIds).stream().map(id -> new Utente(id)).collect(Collectors.toSet()));
+
+		if(this.giocatori.size() > 1) {
+			Set<Utente> set = result.getGiocatori();
+			this.giocatori.forEach(utente -> set.add(utente.buildUtenteModel(false)));
+		}
 		return result;
 	}
 
 	// niente password...
-	public static TavoloDTO buildTavoloDTOFromModel(Tavolo tavoloModel) {
+	public static TavoloDTO buildTavoloDTOFromModel(Tavolo tavoloModel,boolean includeGiocatori) {
 		TavoloDTO result = new TavoloDTO(tavoloModel.getId(), tavoloModel.getDenominazione(), tavoloModel.getEsperienzaMinima(),
 				tavoloModel.getCifraMinima(), tavoloModel.getDateCreated(),UtenteDTO.buildUtenteDTOFromModel(tavoloModel.getUtenteCreazione()));
-		if (!tavoloModel.getGiocatori().isEmpty())
-			result.giocatoriIds = tavoloModel.getGiocatori().stream().map(r -> r.getId()).collect(Collectors.toList())
-					.toArray(new Long[] {});
 
+		if (tavoloModel.getGiocatori()!=null&&tavoloModel.getGiocatori().size()>0) {
+			System.out.println("sono entrato nell' if demmerda");
+			result.setGiocatori(UtenteDTO.createUtenteDTOSetFromModelSet(tavoloModel.getGiocatori()));
+		}
 		return result;
 	}
 	
-	public static List<TavoloDTO> createTavoloDTOListFromModelList(List<Tavolo> modelListInput) {
-		return modelListInput.stream().map(tavoloEntity -> {
-			return TavoloDTO.buildTavoloDTOFromModel(tavoloEntity);
+	public static List<TavoloDTO> createTavoloDTOListFromModelList(List<Tavolo> modelListInput, boolean includeGiocatori) {
+        return modelListInput.stream().map(tavoloEntity -> {
+			return TavoloDTO.buildTavoloDTOFromModel(tavoloEntity, includeGiocatori);
 		}).collect(Collectors.toList());
 	}
 
-	public static Set<TavoloDTO> createTavoloDTOSetFromModelSet(Set<Tavolo> modelListInput) {
+	public static Set<TavoloDTO> createTavoloDTOSetFromModelSet(Set<Tavolo> modelListInput,boolean includeGiocatori) {
 		return modelListInput.stream().map(tavoloEntity -> {
-			return TavoloDTO.buildTavoloDTOFromModel(tavoloEntity);
+			return TavoloDTO.buildTavoloDTOFromModel(tavoloEntity, includeGiocatori);
 		}).collect(Collectors.toSet());
 	}
 	
