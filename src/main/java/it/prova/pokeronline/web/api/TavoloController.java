@@ -22,6 +22,7 @@ import it.prova.pokeronline.dto.TavoloDTOForInsert;
 import it.prova.pokeronline.model.Tavolo;
 import it.prova.pokeronline.service.TavoloService;
 import it.prova.pokeronline.service.UtenteService;
+import it.prova.pokeronline.web.api.exception.AncoraGiocatoriAlTavoloException;
 import it.prova.pokeronline.web.api.exception.IdNotNullForInsertException;
 import it.prova.pokeronline.web.api.exception.TavoloNotFoundException;
 import it.prova.pokeronline.web.api.exception.UtenteNonCombaciaException;
@@ -79,6 +80,9 @@ public class TavoloController {
 		if (tavoloInput.getUtenteCreazione() != null)
 			throw new UtenteNonCombaciaException("Non è ammesso fornire un utente per l'aggiornamento");
 
+		if(tavolo.getGiocatori().size()>0)
+			throw new AncoraGiocatoriAlTavoloException("Ci sono ancora giocatori al tavolo!");
+			
 		tavoloInput.setId(id);
 		Tavolo tavoloAggiornato = tavoloService.aggiorna(tavoloInput.buildTavoloInsertModel());
 		return TavoloDTO.buildTavoloDTOFromModel(tavoloAggiornato,true);
