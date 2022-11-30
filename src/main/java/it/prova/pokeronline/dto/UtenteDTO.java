@@ -2,14 +2,18 @@ package it.prova.pokeronline.dto;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import it.prova.pokeronline.model.Ruolo;
 import it.prova.pokeronline.model.StatoUtente;
-import it.prova.pokeronline.model.Tavolo;
 import it.prova.pokeronline.model.Utente;
 
 
@@ -34,18 +38,20 @@ public class UtenteDTO {
 	@NotBlank(message = "{cognome.notblank}")
 	private String cognome;
 
-	
 	private String email;
 
 	private Date dateCreated;
+	@NotNull(message = "{esperienzaAccumulata.notnull}")
+	private Integer esperienzaAccumulata;
+	@NotNull(message = "{creditoAccumulato.notnull}")
+	private Integer creditoAccumulato;
 
 	private StatoUtente stato;
 
 	private Long[] ruoliIds;
-
+	
+	@JsonIgnoreProperties(value = { "giocatori","utenteCreatore"})
 	private TavoloDTO tavolo;
-	
-	
 
 	public UtenteDTO() {
 	}
@@ -70,6 +76,48 @@ public class UtenteDTO {
 		this.stato = stato;
 		this.ruoliIds = ruoliIds;
 		this.tavolo = tavolo;
+	}
+	
+	
+
+	public UtenteDTO(Long id,String username,String password,String confermaPassword,String nome,String cognome, String email, Date dateCreated,	Integer esperienzaAccumulata,Integer creditoAccumulato, StatoUtente stato,Long[] ruoliIds, TavoloDTO tavolo) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.confermaPassword = confermaPassword;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.email = email;
+		this.dateCreated = dateCreated;
+		this.esperienzaAccumulata = esperienzaAccumulata;
+		this.creditoAccumulato = creditoAccumulato;
+		this.stato = stato;
+		this.ruoliIds = ruoliIds;
+		this.tavolo = tavolo;
+	}
+
+	
+	public UtenteDTO(Long id,String username,String nome,String cognome, Date dateCreated,Integer esperienzaAccumulata,Integer creditoAccumulato) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.dateCreated = dateCreated;
+		this.esperienzaAccumulata = esperienzaAccumulata;
+		this.creditoAccumulato = creditoAccumulato;
+	}
+	
+	public UtenteDTO(Long id,String username,String nome,String cognome, Integer esperienzaAccumulata,Integer creditoAccumulato, StatoUtente stato) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.esperienzaAccumulata = esperienzaAccumulata;
+		this.creditoAccumulato = creditoAccumulato;
+		this.stato = stato;
 	}
 
 	public Long getId() {
@@ -143,6 +191,23 @@ public class UtenteDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+
+	public Integer getEsperienzaAccumulata() {
+		return esperienzaAccumulata;
+	}
+
+	public void setEsperienzaAccumulata(Integer esperienzaAccumulata) {
+		this.esperienzaAccumulata = esperienzaAccumulata;
+	}
+
+	public Integer getCreditoAccumulato() {
+		return creditoAccumulato;
+	}
+
+	public void setCreditoAccumulato(Integer creditoAccumulato) {
+		this.creditoAccumulato = creditoAccumulato;
+	}
 
 	public Long[] getRuoliIds() {
 		return ruoliIds;
@@ -154,9 +219,17 @@ public class UtenteDTO {
 	
 	
 
-	public Utente buildUtenteModel(boolean includeIdRoles,boolean includeTavolo) {
+	public TavoloDTO getTavolo() {
+		return tavolo;
+	}
+
+	public void setTavolo(TavoloDTO tavolo) {
+		this.tavolo = tavolo;
+	}
+//Aggiungere boolean tavolo presente
+	public Utente buildUtenteModel(boolean includeIdRoles) {
 		Utente result = new Utente(this.id, this.username, this.password, this.nome, this.cognome, this.email,
-				this.dateCreated, this.stato);
+				this.dateCreated,this.esperienzaAccumulata,this.creditoAccumulato, this.stato);
 		if (includeIdRoles && ruoliIds != null)
 			result.setRuoli(Arrays.asList(ruoliIds).stream().map(id -> new Ruolo(id)).collect(Collectors.toSet()));
 		return result;
@@ -165,12 +238,25 @@ public class UtenteDTO {
 	// niente password...
 	public static UtenteDTO buildUtenteDTOFromModel(Utente utenteModel) {
 		UtenteDTO result = new UtenteDTO(utenteModel.getId(), utenteModel.getUsername(), utenteModel.getNome(),
-				utenteModel.getCognome(), utenteModel.getStato());
+				utenteModel.getCognome(),utenteModel.getEsperienzaAccumulata(),utenteModel.getCreditoAccumulato() ,utenteModel.getStato());
 		if (!utenteModel.getRuoli().isEmpty())
 			result.ruoliIds = utenteModel.getRuoli().stream().map(r -> r.getId()).collect(Collectors.toList())
 					.toArray(new Long[] {});
 
 		return result;
 	}
+
+	public static List<UtenteDTO> createUtenteDTOListFromModelList(List<Utente> modelListInput) {
+		return modelListInput.stream().map(utenteEntity -> {
+			return UtenteDTO.buildUtenteDTOFromModel(utenteEntity);
+		}).collect(Collectors.toList());
+	}
+	
+	public static Set<UtenteDTO> createUtenteDTOSetFromModelSet(Set<Utente> modelListInput) {
+		return modelListInput.stream().map(agendaEntity -> {
+			return UtenteDTO.buildUtenteDTOFromModel(agendaEntity);
+		}).collect(Collectors.toSet());
+	}
+
 
 }

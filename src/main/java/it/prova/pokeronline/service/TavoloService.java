@@ -6,6 +6,8 @@ import it.prova.pokeronline.model.Tavolo;
 
 public interface TavoloService {
 	List<Tavolo> listAllElements(boolean eager);
+	
+	List<Tavolo> listAllElementsSingoloUtente();
 
 	Tavolo caricaSingoloElemento(Long id);
 
@@ -18,5 +20,7 @@ public interface TavoloService {
 	void rimuovi(Long idToRemove);
 
 	List<Tavolo> findByDenominazione(String denominazione);
+	
+	List<Tavolo> findByExample(Tavolo Example);
 
 }

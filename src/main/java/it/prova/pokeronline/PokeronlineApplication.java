@@ -16,7 +16,7 @@ import it.prova.pokeronline.service.UtenteService;
 
 @SpringBootApplication
 public class PokeronlineApplication implements CommandLineRunner {
-	
+
 	@Autowired
 	private RuoloService ruoloServiceInstance;
 	@Autowired
@@ -25,6 +25,7 @@ public class PokeronlineApplication implements CommandLineRunner {
 	public static void main(String[] args) {
 		SpringApplication.run(PokeronlineApplication.class, args);
 	}
+
 	@Override
 	public void run(String... args) throws Exception {
 		if (ruoloServiceInstance.cercaPerDescrizioneECodice("Administrator", Ruolo.ROLE_ADMIN) == null) {
@@ -34,12 +35,12 @@ public class PokeronlineApplication implements CommandLineRunner {
 		if (ruoloServiceInstance.cercaPerDescrizioneECodice("Classic Player", Ruolo.ROLE_CLASSIC_PLAYER) == null) {
 			ruoloServiceInstance.inserisciNuovo(new Ruolo("Classic Player", Ruolo.ROLE_CLASSIC_PLAYER));
 		}
-		
+
 		if (ruoloServiceInstance.cercaPerDescrizioneECodice("Special Player", Ruolo.ROLE_SPECIAL_PLAYER) == null) {
 			ruoloServiceInstance.inserisciNuovo(new Ruolo("Special Player", Ruolo.ROLE_SPECIAL_PLAYER));
 		}
-		LocalDateTime oraInizio =LocalDateTime.now();
-		LocalDateTime oraFine=LocalDateTime.of(2025,Month.JUNE,29,19,30,40);
+		LocalDateTime oraInizio = LocalDateTime.now();
+		LocalDateTime oraFine = LocalDateTime.of(2025, Month.JUNE, 29, 19, 30, 40);
 		// a differenza degli altri progetti cerco solo per username perche' se vado
 		// anche per password ogni volta ne inserisce uno nuovo, inoltre l'encode della
 		// password non lo
@@ -51,10 +52,6 @@ public class PokeronlineApplication implements CommandLineRunner {
 			utenteServiceInstance.inserisciNuovo(admin);
 			// l'inserimento avviene come created ma io voglio attivarlo
 			utenteServiceInstance.changeUserAbilitation(admin.getId());
-			
-
-
-			
 		}
 
 		if (utenteServiceInstance.findByUsername("user") == null) {
@@ -65,7 +62,6 @@ public class PokeronlineApplication implements CommandLineRunner {
 			utenteServiceInstance.inserisciNuovo(classicUser);
 			// l'inserimento avviene come created ma io voglio attivarlo
 			utenteServiceInstance.changeUserAbilitation(classicUser.getId());
-			
 
 		}
 

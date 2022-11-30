@@ -141,6 +141,38 @@ public class Utente {
 		this.ruoli = ruoli;
 		this.tavolo = tavolo;
 	}
+	
+	
+
+	public Utente(Long id, String username, String password, String nome, String cognome,String email, Date dateCreated,
+			Integer esperienzaAccumulata, Integer creditoAccumulato, StatoUtente stato, Set<Ruolo> ruoli) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.email=email;
+		this.dateCreated = dateCreated;
+		this.esperienzaAccumulata = esperienzaAccumulata;
+		this.creditoAccumulato = creditoAccumulato;
+		this.stato = stato;
+		this.ruoli = ruoli;
+	}
+	public Utente(Long id, String username, String password, String nome, String cognome,String email, Date dateCreated,
+			Integer esperienzaAccumulata, Integer creditoAccumulato, StatoUtente stato) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.email=email;
+		this.dateCreated = dateCreated;
+		this.esperienzaAccumulata = esperienzaAccumulata;
+		this.creditoAccumulato = creditoAccumulato;
+		this.stato = stato;
+	}
 
 	public Long getId() {
 		return id;
@@ -209,6 +241,22 @@ public class Utente {
 	public boolean isAdmin() {
 		for (Ruolo ruoloItem : ruoli) {
 			if (ruoloItem.getCodice().equals(Ruolo.ROLE_ADMIN))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean isSpecial() {
+		for (Ruolo ruoloItem : ruoli) {
+			if (ruoloItem.getCodice().equals(Ruolo.ROLE_SPECIAL_PLAYER))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean isUser() {
+		for (Ruolo ruoloItem : ruoli) {
+			if (ruoloItem.getCodice().equals(Ruolo.ROLE_CLASSIC_PLAYER))
 				return true;
 		}
 		return false;
